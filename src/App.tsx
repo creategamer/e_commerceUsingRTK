@@ -46,8 +46,14 @@ function App() {
           <Route path="/" element={<MainLayout />}>
             {/* Public routes */}
             <Route index element={<Home />} />
-            <Route path="signup" element={<SignUp routing="path" />} />
-            <Route path="signin" element={<SignIn routing="path" />} />
+            <Route 
+              path="signup" 
+              element={<SignUp routing="path" path="/signup" />} 
+            />
+            <Route 
+              path="signin" 
+              element={<SignIn routing="path" path="/signin" />} 
+            />
             <Route path="menu" element={<Menu />} />
             <Route path="menu/:id" element={<DishDetails />} />
             <Route path="cart" element={<Cart />} />
