@@ -8,7 +8,6 @@ import { ClerkProvider, SignedIn, SignedOut, RedirectToSignIn,SignUp, SignIn } f
 // Pages (These will be implemented later)
 import Home from './app/pages/Home';
 import Menu from './app/pages/Menu';
-import DishDetails from './app/pages/DishDetails';
 import Cart from './app/pages/Cart';
 import About from './app/pages/About';
 import Contact from './app/pages/Contact';
@@ -16,6 +15,7 @@ import NotFound from './app/pages/NotFound';
 import MainLayout from './app/components/layout/MainLayout';
 import Checkout from './app/pages/Checkout';
 import Orders from './app/pages/Orders';
+import ProductDetail from './app/pages/ProductDetail';
 
 
 // Import your Publishable Key
@@ -46,16 +46,16 @@ function App() {
           <Route path="/" element={<MainLayout />}>
             {/* Public routes */}
             <Route index element={<Home />} />
-            <Route 
-              path="signup" 
-              element={<SignUp routing="path" path="/signup" />} 
+            <Route
+              path="signup"
+              element={<SignUp routing="path" path="/signup" redirectUrl="/menu" />}
             />
-            <Route 
-              path="signin" 
-              element={<SignIn routing="path" path="/signin" />} 
+            <Route
+              path="signin"
+              element={<SignIn routing="path" path="/signin" redirectUrl="/menu" />}
             />
             <Route path="menu" element={<Menu />} />
-            <Route path="menu/:id" element={<DishDetails />} />
+            <Route path="product/:id" element={<ProductDetail />} />
             <Route path="cart" element={<Cart />} />
             <Route path="about" element={<About />} />
             <Route path="contact" element={<Contact />} />

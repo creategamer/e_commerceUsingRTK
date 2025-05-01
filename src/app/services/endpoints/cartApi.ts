@@ -1,27 +1,21 @@
 import { apiSlice } from '../api';
+import { CartItem } from '../../types'; // Ensure CartItem is defined in types.ts
 
 export const cartApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    // Get all carts
-    getCarts: builder.query({
+    getCarts: builder.query<CartItem[], void>({
       query: () => 'carts',
       providesTags: ['Cart'],
     }),
-    
-    // Get a specific user's cart
-    getUserCart: builder.query({
+    getUserCart: builder.query<CartItem[], string>({
       query: (userId) => `carts/user/${userId}`,
-      providesTags: (result, error, userId) => [{ type: 'Cart', id: userId }],
+      providesTags: (_, __, userId) => [{ type: 'Cart', id: userId }],
     }),
-    
-    // Get a single cart by ID
-    getCartById: builder.query({
+    getCartById: builder.query<CartItem[], number>({
       query: (id) => `carts/${id}`,
-      providesTags: (result, error, id) => [{ type: 'Cart', id }],
+      providesTags: (_, __, id) => [{ type: 'Cart', id }],
     }),
-    
-    // Add a new cart
-    addCart: builder.mutation({
+    addCart: builder.mutation<void, CartItem[]>({
       query: (cart) => ({
         url: 'carts',
         method: 'POST',
@@ -29,24 +23,20 @@ export const cartApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Cart'],
     }),
-    
-    // Update a cart
-    updateCart: builder.mutation({
+    updateCart: builder.mutation<void, { id: number; cart: Partial<CartItem[]> }>({
       query: ({ id, ...cart }) => ({
         url: `carts/${id}`,
         method: 'PUT',
         body: cart,
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: 'Cart', id }],
+      invalidatesTags: (_, __, { id }) => [{ type: 'Cart', id }],
     }),
-    
-    // Delete a cart
-    deleteCart: builder.mutation({
+    deleteCart: builder.mutation<void, number>({
       query: (id) => ({
         url: `carts/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: (result, error, id) => [{ type: 'Cart', id }],
+      invalidatesTags: (_, __, id) => [{ type: 'Cart', id }],
     }),
   }),
 });

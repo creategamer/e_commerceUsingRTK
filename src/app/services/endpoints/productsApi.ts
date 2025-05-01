@@ -1,4 +1,3 @@
-// src/app/services/endpoints/productsApi.ts
 import { apiSlice } from '../api';
 import { Product } from '../../types';
 
@@ -10,7 +9,7 @@ export const productsApi = apiSlice.injectEndpoints({
     }),
     getProduct: builder.query<Product, number>({
       query: (id) => `products/${id}`,
-      providesTags: (result, error, id) => [{ type: 'Products', id }],
+      providesTags: (_, __, id) => [{ type: 'Products', id }],
     }),
     getCategories: builder.query<string[], void>({
       query: () => 'products/categories',
@@ -18,11 +17,8 @@ export const productsApi = apiSlice.injectEndpoints({
     }),
     getProductsByCategory: builder.query<Product[], string>({
       query: (category) => `products/category/${category}`,
-      providesTags: (result, error, category) => [
-        { type: 'Products', id: category },
-      ],
+      providesTags: (_, __, category) => [{ type: 'Products', id: category }],
     }),
-    // Add search endpoint
     searchProducts: builder.query<Product[], string>({
       query: (searchTerm) => `products/search?q=${encodeURIComponent(searchTerm)}`,
       providesTags: ['Products'],
@@ -35,5 +31,5 @@ export const {
   useGetProductQuery,
   useGetCategoriesQuery,
   useGetProductsByCategoryQuery,
-  useSearchProductsQuery, // Export the new hook
+  useSearchProductsQuery,
 } = productsApi;

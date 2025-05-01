@@ -9,14 +9,14 @@ const ContactPage = () => {
     message: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [activeTab, setActiveTab] = useState('general');
+  const [activeTab, setActiveTab] = useState<'general' | 'shipping' | 'returns'>('general');
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Form submission logic would go here
     console.log('Form submitted:', formData);
@@ -220,7 +220,7 @@ const ContactPage = () => {
                   <textarea
                     id="message"
                     name="message"
-                    rows="4"
+                    rows={4}
                     value={formData.message}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
