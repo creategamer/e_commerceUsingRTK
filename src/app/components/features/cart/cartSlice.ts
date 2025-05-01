@@ -13,12 +13,14 @@ interface CartState {
   items: CartItem[];
   totalItems: number;
   totalAmount: number;
+  isCartOpen: boolean; // Add isCartOpen
 }
 
 const initialState: CartState = {
   items: [],
   totalItems: 0,
   totalAmount: 0,
+  isCartOpen: false, // Initialize as false (cart closed by default)
 };
 
 const calculateTotals = (items: CartItem[]) => {
@@ -74,9 +76,12 @@ const cartSlice = createSlice({
       state.totalItems = 0;
       state.totalAmount = 0;
     },
+    toggleCart: (state) => {
+      state.isCartOpen = !state.isCartOpen; // Toggle isCartOpen
+    },
   },
 });
 
-export const { addToCart, removeFromCart, updateQuantity, clearCart } =
+export const { addToCart, removeFromCart, updateQuantity, clearCart, toggleCart } =
   cartSlice.actions;
 export default cartSlice.reducer;

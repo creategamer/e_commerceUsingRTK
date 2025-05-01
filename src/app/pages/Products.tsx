@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Star, ShoppingBag, Filter, X } from 'lucide-react';
@@ -8,7 +8,9 @@ import {
   useGetProductsByCategoryQuery,
   useSearchProductsQuery
 } from '../services/endpoints/productsApi';
-import { addToCart } from '../features/cart/cartSlice';
+// import { addToCart } from '../features/cart/cartSlice';
+import { addToCart } from '../components/features/cart/cartSlice';
+import { Product } from '../types';
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -37,9 +39,9 @@ const Products = () => {
   // Use the appropriate products data based on filters
   const products = categoryParam ? categoryProducts : searchParam ? searchResults : allProducts;
   const isLoading = categoryParam ? categoryProductsLoading : searchParam ? searchLoading : allProductsLoading;
-  
+    
   // Filter and sort products
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   
   useEffect(() => {
     if (products) {
@@ -68,7 +70,7 @@ const Products = () => {
     }
   }, [products, priceRange, selectedRating, sortBy]);
   
-  const handleAddToCart = (product) => {
+  const handleAddToCart = (product:Product) => {
     dispatch(addToCart({
       id: product.id,
       title: product.title,
@@ -78,7 +80,7 @@ const Products = () => {
     }));
   };
   
-  const handleCategoryChange = (category) => {
+  const handleCategoryChange = (category: string) => {
     if (category) {
       searchParams.set('category', category);
       if (searchParams.has('search')) searchParams.delete('search');

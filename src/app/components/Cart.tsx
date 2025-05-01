@@ -1,24 +1,21 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, TypedUseSelectorHook } from 'react-redux';
 import { X, Minus, Plus, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { 
-  removeItem, 
-  updateQuantity, 
-  clearCart, 
-  toggleCart 
-} from '../features/cart/cartSlice';
+import { RootState } from '../../app/store';
+import {  removeFromCart, updateQuantity, clearCart, toggleCart } from './features/cart/cartSlice';
+import { CartItem } from '../components/features/cart/cartSlice'
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const { items, totalItems, totalAmount, isCartOpen } = useSelector((state) => state.cart);
+  const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+  const { items, totalItems, totalAmount, isCartOpen } = useAppSelector((state) => state.cart);
 
-  const handleUpdateQuantity = (id, quantity) => {
+  const handleUpdateQuantity = (id: number, quantity: number) => {
     dispatch(updateQuantity({ id, quantity }));
   };
 
-  const handleRemoveItem = (id) => {
-    dispatch(removeItem(id));
+  const handleRemoveItem = (id: number) => {
+    dispatch(removeFromCart(id));
   };
 
   if (!isCartOpen) return null;
@@ -31,20 +28,20 @@ const Cart = () => {
             <ShoppingBag className="mr-2" />
             Your Cart ({totalItems})
           </h2>
-          <button 
+          <button
             onClick={() => dispatch(toggleCart())}
             className="p-1 rounded-full hover:bg-gray-100"
           >
             <X />
           </button>
         </div>
-        
+
         <div className="flex-1 overflow-y-auto p-4">
           {items.length === 0 ? (
             <div className="text-center py-10">
               <ShoppingBag className="mx-auto mb-4 text-gray-400" size={48} />
               <p className="text-gray-500">Your cart is empty</p>
-              <button 
+              <button
                 onClick={() => dispatch(toggleCart())}
                 className="mt-4 text-indigo-600 hover:text-indigo-800 font-medium"
               >
@@ -53,24 +50,24 @@ const Cart = () => {
             </div>
           ) : (
             <div className="space-y-4">
-              {items.map((item) => (
+              {items.map((item: CartItem) => (
                 <div key={item.id} className="flex border rounded-lg overflow-hidden">
                   <div className="w-24 h-24 bg-gray-100 p-2">
-                    <img 
-                      src={item.image} 
-                      alt={item.title} 
-                      className="w-full h-full object-contain" 
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-contain"
                     />
                   </div>
                   <div className="flex-1 p-3 flex flex-col">
                     <div className="flex justify-between">
-                      <Link 
+                      <Link
                         to={`/product/${item.id}`}
                         className="font-medium text-gray-800 hover:text-indigo-600 line-clamp-2"
                       >
                         {item.title}
                       </Link>
-                      <button 
+                      <button
                         onClick={() => handleRemoveItem(item.id)}
                         className="text-red-500 hover:text-red-700"
                       >
@@ -82,7 +79,7 @@ const Cart = () => {
                     )}
                     <div className="flex justify-between items-center mt-auto">
                       <div className="flex items-center border rounded">
-                        <button 
+                        <button
                           onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
                           className="px-2 py-1 hover:bg-gray-100"
                           disabled={item.quantity <= 1}
@@ -90,7 +87,7 @@ const Cart = () => {
                           <Minus size={16} />
                         </button>
                         <span className="px-3">{item.quantity}</span>
-                        <button 
+                        <button
                           onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
                           className="px-2 py-1 hover:bg-gray-100"
                         >
@@ -105,7 +102,7 @@ const Cart = () => {
             </div>
           )}
         </div>
-        
+
         {items.length > 0 && (
           <div className="border-t p-4">
             <div className="flex justify-between mb-4">
@@ -122,7 +119,7 @@ const Cart = () => {
             >
               Checkout
             </Link>
-            <button 
+            <button
               onClick={() => dispatch(clearCart())}
               className="block w-full text-red-500 hover:text-red-700 text-center py-2 font-medium"
             >

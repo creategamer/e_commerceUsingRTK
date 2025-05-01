@@ -1,6 +1,4 @@
-// import { useGetProductsQuery } from '../services/endpoints/productApi';
 import { useDispatch } from 'react-redux';
-// import { addToCart } from '../../features/cart/cartSlice';
 import { Link } from 'react-router-dom';
 import { useGetProductsQuery } from '../services/endpoints/productsApi';
 import { addToCart } from '../components/features/cart/cartSlice';

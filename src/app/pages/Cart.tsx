@@ -1,14 +1,26 @@
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store';
-import { removeFromCart, updateQuantity, clearCart } from '../components/features/cart/cartSlice';
+import { useSelector, useDispatch, TypedUseSelectorHook } from 'react-redux';
+import { RootState } from '../../app/store'; // Adjust path based on your store location
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
+import { removeFromCart, updateQuantity, clearCart } from '../components/features/cart/cartSlice';
+
+
+// Define CartItem type (or import from cartSlice)
+interface CartItem {
+  id: number;
+  title: string;
+  price: number;
+  image: string;
+  quantity: number;
+  category?: string;
+}
 
 const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const cart = useSelector((state: RootState) => state.cart);
+  const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+  const cart = useAppSelector((state) => state.cart);
   const { user } = useUser();
   const [showCheckout, setShowCheckout] = useState(false);
   const [formData, setFormData] = useState({
@@ -36,7 +48,7 @@ const Cart = () => {
 
   const handleCheckout = () => {
     if (!user) {
-      alert('Please sign in to proceed with checkout.');
+      navigate('/signin'); // Redirect to sign-in page
       return;
     }
     setShowCheckout(true);
@@ -56,7 +68,7 @@ const Cart = () => {
       date: new Date().toISOString().split('T')[0],
       total: cart.totalAmount,
       status: 'Pending',
-      items: cart.items.map((item) => ({
+      items: cart.items.map((item: CartItem) => ({
         productId: item.id,
         productName: item.title,
         quantity: item.quantity,
@@ -88,7 +100,7 @@ const Cart = () => {
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {cart.items.map((item) => (
+            {cart.items.map((item: CartItem) => (
               <div
                 key={item.id}
                 className="bg-white rounded-lg shadow-md p-4 flex flex-col"

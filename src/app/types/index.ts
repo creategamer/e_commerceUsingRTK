@@ -22,6 +22,16 @@ export interface CartItem {
   category?: string;
 }
 
+// src/types.ts
+// export interface CartItem {
+//   id: number;
+//   title: string;
+//   price: number;
+//   image: string;
+//   quantity: number;
+//   category?: string;
+// }
+
 // Order types
 export interface OrderItem {
   productId: number;
